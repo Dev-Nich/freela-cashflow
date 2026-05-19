@@ -421,7 +421,7 @@ Percentual comprometido = despesas previstas / receitas previstas * 100
 ```text
 1. Criar projeto Spring Boot.
 2. Configurar MongoDB com Docker.
-3. Configurar application.yml.
+3. Configurar application.properties.
 4. Criar documento User.
 5. Criar repository de User.
 6. Criar cadastro e login.
@@ -458,12 +458,12 @@ Conteúdo:
 services:
   mongodb:
     image: mongo:7
-    container_name: freela-finance-mongodb
+    container_name: freela-cashflow-mongodb
     restart: always
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_DATABASE: freela_finance
+      MONGO_INITDB_DATABASE: freela_cashflow
     volumes:
       - mongodb_data:/data/db
 
@@ -471,27 +471,21 @@ volumes:
   mongodb_data:
 ```
 
-## 21. application.yml inicial
+## 21. application.properties inicial
 
 Arquivo:
 
 ```text
-src/main/resources/application.yml
+src/main/resources/application.properties
 ```
 
 Conteúdo:
 
-```yaml
-spring:
-  application:
-    name: freela-cashflow
+```properties
+spring.application.name=freela-cashflow
+spring.data.mongodb.uri=mongodb://localhost:27017/freela_cashflow
 
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/freela_finance
-
-server:
-  port: 8080
+server.port=8080
 ```
 
 ## 22. Futuras melhorias
