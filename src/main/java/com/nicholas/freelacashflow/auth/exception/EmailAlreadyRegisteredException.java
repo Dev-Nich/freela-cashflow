@@ -1,4 +1,4 @@
-package com.nicholas.freelacashflow.exception;
+package com.nicholas.freelacashflow.auth.exception;
 
 public class EmailAlreadyRegisteredException extends RuntimeException {
 

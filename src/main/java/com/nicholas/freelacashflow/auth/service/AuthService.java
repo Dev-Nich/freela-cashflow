@@ -1,17 +1,17 @@
-package com.nicholas.freelacashflow.service;
+package com.nicholas.freelacashflow.auth.service;
 
 import java.time.LocalDateTime;
 
-import com.nicholas.freelacashflow.domain.document.UserDocument;
-import com.nicholas.freelacashflow.dto.request.LoginRequest;
-import com.nicholas.freelacashflow.dto.request.RegisterRequest;
-import com.nicholas.freelacashflow.dto.response.AuthResponse;
-import com.nicholas.freelacashflow.dto.response.UserResponse;
-import com.nicholas.freelacashflow.exception.EmailAlreadyRegisteredException;
-import com.nicholas.freelacashflow.exception.InvalidCredentialsException;
-import com.nicholas.freelacashflow.repository.UserRepository;
+import com.nicholas.freelacashflow.auth.dto.AuthResponse;
+import com.nicholas.freelacashflow.auth.dto.LoginRequest;
+import com.nicholas.freelacashflow.auth.dto.RegisterRequest;
+import com.nicholas.freelacashflow.auth.exception.EmailAlreadyRegisteredException;
+import com.nicholas.freelacashflow.auth.exception.InvalidCredentialsException;
 import com.nicholas.freelacashflow.security.AuthenticatedUser;
 import com.nicholas.freelacashflow.security.JwtService;
+import com.nicholas.freelacashflow.user.document.UserDocument;
+import com.nicholas.freelacashflow.user.dto.UserResponse;
+import com.nicholas.freelacashflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

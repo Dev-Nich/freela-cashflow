@@ -1,8 +1,8 @@
-package com.nicholas.freelacashflow.repository;
+package com.nicholas.freelacashflow.user.repository;
 
 import java.util.Optional;
 
-import com.nicholas.freelacashflow.domain.document.UserDocument;
+import com.nicholas.freelacashflow.user.document.UserDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<UserDocument, String> {

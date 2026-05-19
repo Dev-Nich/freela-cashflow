@@ -1,4 +1,4 @@
-package com.nicholas.freelacashflow.dto.response;
+package com.nicholas.freelacashflow.user.dto;
 
 public record UserResponse(
         String id,

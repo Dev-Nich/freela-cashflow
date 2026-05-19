@@ -1,4 +1,4 @@
-package com.nicholas.freelacashflow.domain.document;
+package com.nicholas.freelacashflow.user.document;
 
 import java.time.LocalDateTime;
 

@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nicholas.freelacashflow.auth.exception.EmailAlreadyRegisteredException;
+import com.nicholas.freelacashflow.auth.exception.InvalidCredentialsException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

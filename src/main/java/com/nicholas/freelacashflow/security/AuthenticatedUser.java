@@ -3,7 +3,7 @@ package com.nicholas.freelacashflow.security;
 import java.util.Collection;
 import java.util.List;
 
-import com.nicholas.freelacashflow.domain.document.UserDocument;
+import com.nicholas.freelacashflow.user.document.UserDocument;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,9 +1,9 @@
-package com.nicholas.freelacashflow.controller;
+package com.nicholas.freelacashflow.auth.controller;
 
-import com.nicholas.freelacashflow.dto.request.LoginRequest;
-import com.nicholas.freelacashflow.dto.request.RegisterRequest;
-import com.nicholas.freelacashflow.dto.response.AuthResponse;
-import com.nicholas.freelacashflow.service.AuthService;
+import com.nicholas.freelacashflow.auth.dto.AuthResponse;
+import com.nicholas.freelacashflow.auth.dto.LoginRequest;
+import com.nicholas.freelacashflow.auth.dto.RegisterRequest;
+import com.nicholas.freelacashflow.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

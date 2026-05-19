@@ -1,6 +1,6 @@
 package com.nicholas.freelacashflow.security;
 
-import com.nicholas.freelacashflow.repository.UserRepository;
+import com.nicholas.freelacashflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
