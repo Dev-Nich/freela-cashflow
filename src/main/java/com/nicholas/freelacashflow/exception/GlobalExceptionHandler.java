@@ -3,6 +3,7 @@ package com.nicholas.freelacashflow.exception;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.nicholas.freelacashflow.auth.exception.EmailAlreadyRegisteredException;
 import com.nicholas.freelacashflow.auth.exception.InvalidCredentialsException;
@@ -10,6 +11,7 @@ import com.nicholas.freelacashflow.category.exception.CategoryAlreadyExistsExcep
 import com.nicholas.freelacashflow.category.exception.CategoryNotFoundException;
 import com.nicholas.freelacashflow.expense.exception.ExpenseNotFoundException;
 import com.nicholas.freelacashflow.income.exception.IncomeNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +69,16 @@ public class GlobalExceptionHandler {
         body.put("fields", fields);
 
         return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException exception) {
+        String message = exception.getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + " " + violation.getMessage())
+                .collect(Collectors.joining("; "));
+
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
