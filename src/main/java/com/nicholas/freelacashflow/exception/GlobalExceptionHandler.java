@@ -8,6 +8,8 @@ import com.nicholas.freelacashflow.auth.exception.EmailAlreadyRegisteredExceptio
 import com.nicholas.freelacashflow.auth.exception.InvalidCredentialsException;
 import com.nicholas.freelacashflow.category.exception.CategoryAlreadyExistsException;
 import com.nicholas.freelacashflow.category.exception.CategoryNotFoundException;
+import com.nicholas.freelacashflow.expense.exception.ExpenseNotFoundException;
+import com.nicholas.freelacashflow.income.exception.IncomeNotFoundException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleCategoryNotFound(CategoryNotFoundException exception) {
+        return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(IncomeNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleIncomeNotFound(IncomeNotFoundException exception) {
+        return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(ExpenseNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleExpenseNotFound(ExpenseNotFoundException exception) {
         return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
