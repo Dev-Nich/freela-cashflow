@@ -1,8 +1,24 @@
 services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: freela-cashflow-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/freela_cashflow
+      SECURITY_JWT_SECRET: ${SECURITY_JWT_SECRET:-freela-cashflow-compose-secret-change-me}
+      SECURITY_JWT_ISSUER: ${SECURITY_JWT_ISSUER:-freela-cashflow}
+      SECURITY_JWT_EXPIRATION_SECONDS: ${SECURITY_JWT_EXPIRATION_SECONDS:-86400}
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:7
     container_name: freela-cashflow-mongodb
-    restart: always
+    restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
