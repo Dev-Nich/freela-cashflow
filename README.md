@@ -19,10 +19,11 @@ Implementado:
 - Marcacao de despesa como paga.
 - Filtros por mes e ano.
 - Resumo financeiro mensal.
-- MongoDB via Docker Compose.
+- Docker Compose completo com API + MongoDB.
 - Dockerfile da aplicacao.
 - Testes unitarios de services principais.
-- Swagger/OpenAPI via Springdoc.
+- Testes de integracao de controllers com MongoDB via Testcontainers.
+- Swagger/OpenAPI via Springdoc com descricoes por endpoint.
 
 ## Stack
 
@@ -116,21 +117,23 @@ Responsabilidades:
 
 ## Rodando localmente
 
-Suba o MongoDB:
+Suba API + MongoDB:
 
 ```bash
-docker compose up -d
+docker compose up --build
 ```
 
-Rode a API:
+Tambem e possivel subir apenas o MongoDB pelo Compose e rodar a API via Maven:
 
 ```bash
+docker compose up -d mongodb
 ./mvnw spring-boot:run
 ```
 
 No Windows PowerShell:
 
 ```powershell
+docker compose up -d mongodb
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -162,22 +165,19 @@ Para producao, troque obrigatoriamente `SECURITY_JWT_SECRET`.
 
 ## Docker
 
-Build da imagem:
+O Compose sobe a API na porta `8080` e o MongoDB na porta `27017`:
+
+```bash
+docker compose up --build
+```
+
+Build manual da imagem:
 
 ```bash
 docker build -t freela-cashflow-api:local .
 ```
 
 Rodando a API em container apontando para o Mongo local do host:
-
-```bash
-docker run --rm -p 8080:8080 \
-  -e SPRING_DATA_MONGODB_URI=mongodb://host.docker.internal:27017/freela_cashflow \
-  -e SECURITY_JWT_SECRET=change-this-secret \
-  freela-cashflow-api:local
-```
-
-No PowerShell:
 
 ```powershell
 docker run --rm -p 8080:8080 `
@@ -394,6 +394,10 @@ Cobertura atual:
 - `ExpenseService`
 - `MonthlySummaryService`
 - carga de contexto Spring
+- controllers de autenticacao, categorias, receitas, despesas e resumo mensal
+- integracao com MongoDB via Testcontainers
+
+Os testes de integracao precisam de Docker ativo. Quando Docker nao esta disponivel, eles sao ignorados automaticamente.
 
 ## Documentacao complementar
 
@@ -402,13 +406,3 @@ Documentos de planejamento:
 - `docs/freela-cashflow-brd.md`
 - `docs/freela-cashflow-planejamento.md`
 
-## Roadmap
-
-Proximos passos sugeridos:
-
-- Melhorar cobertura de testes de controllers.
-- Criar testes de integracao com MongoDB.
-- Adicionar pipeline de CI.
-- Criar Docker Compose completo com API + MongoDB.
-- Melhorar documentacao Swagger com descricoes por endpoint.
-- Criar frontend.
