@@ -13,25 +13,27 @@ export function CommitmentIndicator({ percentage, pendingExpenses }: CommitmentI
   const isAttention = percentage >= 45 && percentage < 70;
 
   return (
-    <Card className="p-5">
+    <Card className="p-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-ink-muted">Renda comprometida</p>
-          <p className="mt-2 text-3xl font-semibold text-ink">{percentage.toFixed(1)}%</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+            Renda comprometida
+          </p>
+          <p className="mt-2 text-2xl font-semibold text-ink">{percentage.toFixed(1)}%</p>
         </div>
         <span
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-medium",
-            isTight && "bg-destructive/10 text-destructive",
-            isAttention && "bg-warning/15 text-[#8B6418]",
-            !isTight && !isAttention && "bg-success/10 text-success",
+            "rounded-md border px-2 py-0.5 text-[11px] font-medium leading-5",
+            isTight && "border-[#f0d0d0] bg-[#fbeaea] text-[#b34a4a]",
+            isAttention && "border-[#f1dfaa] bg-[#fff4d6] text-[#9a6b13]",
+            !isTight && !isAttention && "border-[#d7eadf] bg-[#eaf5ef] text-[#2f7d5c]",
           )}
         >
           {getCommitmentMessage(percentage)}
         </span>
       </div>
 
-      <div className="mt-5 h-3 overflow-hidden rounded-full bg-background">
+      <div className="mt-5 h-2 overflow-hidden rounded-full bg-muted">
         <div
           className={cn(
             "h-full rounded-full transition-all",
@@ -44,7 +46,9 @@ export function CommitmentIndicator({ percentage, pendingExpenses }: CommitmentI
       </div>
 
       <p className="mt-4 text-sm text-ink-muted">
-        Você ainda tem {pendingExpenses.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} em despesas pendentes este mês.
+        Você ainda tem{" "}
+        {pendingExpenses.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} em
+        despesas pendentes este mês.
       </p>
     </Card>
   );

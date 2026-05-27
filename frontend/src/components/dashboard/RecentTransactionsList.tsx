@@ -10,9 +10,9 @@ export function RecentTransactionsList({ transactions }: RecentTransactionsListP
   const visibleTransactions = transactions.slice(0, 8);
 
   return (
-    <Card className="p-5">
+    <Card className="p-4">
       <div className="mb-4">
-        <p className="text-base font-semibold text-ink">Movimentações do mês</p>
+        <p className="text-sm font-semibold text-ink">Movimentações do mês</p>
         <p className="mt-1 text-sm text-ink-muted">Receitas e despesas ordenadas por data.</p>
       </div>
 

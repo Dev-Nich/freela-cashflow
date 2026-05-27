@@ -12,14 +12,14 @@ export function FinancialSummaryGrid({ summary }: FinancialSummaryGridProps) {
       <SummaryCard
         title="Receita prevista"
         value={summary.expectedIncome}
-        helper="Tudo que está programado para entrar"
+        helper="Tudo programado para entrar"
         icon={ArrowUpRight}
         tone="info"
       />
       <SummaryCard
         title="Receita recebida"
         value={summary.receivedIncome}
-        helper="Valor que já entrou no mês"
+        helper="Valor que já entrou"
         icon={CheckCircle2}
         tone="success"
       />
@@ -40,14 +40,14 @@ export function FinancialSummaryGrid({ summary }: FinancialSummaryGridProps) {
       <SummaryCard
         title="Saldo previsto"
         value={summary.expectedBalance}
-        helper="Estimativa para fechar o mês"
+        helper="Estimativa do mês"
         icon={Scale}
         tone="primary"
       />
       <SummaryCard
         title="Saldo real"
         value={summary.realBalance}
-        helper="Recebido menos despesas pagas"
+        helper="Recebido menos pago"
         icon={Clock3}
         tone="success"
       />

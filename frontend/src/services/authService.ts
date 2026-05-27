@@ -1,5 +1,5 @@
 import { apiRequest, removeToken, setToken } from "@/services/api";
-import type { AuthResponse, LoginRequest, User } from "@/types/auth";
+import type { AuthResponse, LoginRequest, RegisterRequest, User } from "@/types/auth";
 
 const USER_KEY = "freela_cashflow_user";
 
@@ -10,6 +10,19 @@ export interface StoredAuth {
 
 export async function login(payload: LoginRequest) {
   const response = await apiRequest<AuthResponse>("/api/auth/login", {
+    method: "POST",
+    authenticated: false,
+    body: JSON.stringify(payload),
+  });
+
+  setToken(response.token);
+  localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+
+  return response;
+}
+
+export async function register(payload: RegisterRequest) {
+  const response = await apiRequest<AuthResponse>("/api/auth/register", {
     method: "POST",
     authenticated: false,
     body: JSON.stringify(payload),

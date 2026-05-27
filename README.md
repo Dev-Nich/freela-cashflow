@@ -1,31 +1,64 @@
 # Freela-CashFlow
 
-API REST para freelancers e profissionais autonomos controlarem receitas, despesas e fluxo de caixa mensal.
+Freela-CashFlow é uma aplicação full stack de controle financeiro mensal para freelancers, autônomos, estudantes que fazem trabalhos extras e pessoas com renda variável.
 
-O projeto resolve um problema comum de quem recebe renda variavel: saber quanto esta previsto para entrar, quanto ja foi recebido, quanto esta comprometido com despesas e qual sera o saldo real e previsto do mes.
+O objetivo do produto é responder, com clareza, perguntas comuns de quem não tem renda fixa:
 
-## Status
+- quanto está previsto para entrar no mês;
+- quanto já foi recebido;
+- quanto está previsto em despesas;
+- quanto já foi pago;
+- quais despesas ainda estão pendentes ou vencidas;
+- qual é o saldo previsto;
+- qual é o saldo real;
+- qual percentual da renda já está comprometido.
 
-MVP backend em desenvolvimento avancado.
+O projeto contém uma API REST em Java/Spring Boot com MongoDB e um frontend em React/TypeScript consumindo dados reais da API.
 
-Implementado:
+## Status do Projeto
 
-- Autenticacao com cadastro, login e JWT.
-- Isolamento de dados por usuario autenticado.
+MVP finalizado.
+
+Implementado no backend:
+
+- Autenticação com cadastro, login e JWT.
+- Isolamento de dados por usuário autenticado.
 - CRUD de categorias.
 - CRUD de receitas.
 - CRUD de despesas.
-- Marcacao de receita como recebida.
-- Marcacao de despesa como paga.
-- Filtros por mes e ano.
+- Marcação de receita como recebida.
+- Marcação de despesa como paga.
+- Filtros por mês e ano.
 - Resumo financeiro mensal.
-- Docker Compose completo com API + MongoDB.
-- Dockerfile da aplicacao.
-- Testes unitarios de services principais.
-- Testes de integracao de controllers com MongoDB via Testcontainers.
-- Swagger/OpenAPI via Springdoc com descricoes por endpoint.
+- Seed automático de dados reais de desenvolvimento com profile `dev`.
+- Docker Compose com API + MongoDB.
+- Dockerfile da aplicação.
+- Swagger/OpenAPI.
+- Testes unitários.
+
+Implementado no frontend:
+
+- Login e cadastro consumindo a API real.
+- Armazenamento simples do JWT para desenvolvimento.
+- Dashboard mensal autenticado.
+- Filtro por mês e ano.
+- Cards de resumo financeiro.
+- Indicador de renda comprometida.
+- Timeline de fluxo do mês.
+- Lista de movimentações reais do mês.
+- Tela de receitas.
+- Tela de despesas.
+- Tela de categorias.
+- Tela de análises com gráficos simples baseados nos dados reais.
+- Formulários para criar receita, despesa e categoria.
+- Ação para resolver pendências marcando despesas como pagas.
+- Tema claro/escuro.
+- Sidebar colapsada com expansão no hover.
+- Interface SaaS clean inspirada em Notion/Linear.
 
 ## Stack
+
+Backend:
 
 - Java 17
 - Spring Boot 3.5.x
@@ -40,57 +73,45 @@ Implementado:
 - Docker
 - MongoDB 7
 
-## Arquitetura
+Frontend:
 
-O projeto usa uma arquitetura em camadas organizada por feature.
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+- clsx
+- tailwind-merge
+
+## Estrutura do Projeto
+
+```text
+.
+|-- src/                         Backend Spring Boot
+|-- frontend/                    Frontend React/Vite
+|-- docs/                        Documentos de planejamento
+|-- docker-compose.yml
+|-- Dockerfile
+|-- pom.xml
+`-- README.md
+```
+
+Arquitetura do backend:
 
 ```text
 src/main/java/com/nicholas/freelacashflow
 |
 |-- auth
-|   |-- controller
-|   |-- dto
-|   |-- exception
-|   `-- service
-|
 |-- category
-|   |-- controller
-|   |-- document
-|   |-- dto
-|   |-- exception
-|   |-- repository
-|   `-- service
-|
 |-- income
-|   |-- controller
-|   |-- document
-|   |-- dto
-|   |-- enums
-|   |-- exception
-|   |-- repository
-|   `-- service
-|
 |-- expense
-|   |-- controller
-|   |-- document
-|   |-- dto
-|   |-- enums
-|   |-- exception
-|   |-- repository
-|   `-- service
-|
 |-- summary
-|   |-- controller
-|   |-- dto
-|   `-- service
-|
 |-- config
+|   `-- seed
 |-- exception
 |-- security
 `-- user
-    |-- document
-    |-- dto
-    `-- repository
 ```
 
 Fluxo principal:
@@ -99,23 +120,30 @@ Fluxo principal:
 Controller -> Service -> Repository -> MongoDB
 ```
 
-Responsabilidades:
+Arquitetura do frontend:
 
-- `controller`: entrada HTTP e contratos REST.
-- `service`: regras de negocio e isolamento por usuario.
-- `repository`: acesso ao MongoDB via Spring Data.
-- `document`: modelo persistido em collections MongoDB.
-- `dto`: payloads de entrada e saida da API.
-- `security`: JWT, usuario autenticado e filtro de seguranca.
-- `exception`: tratamento padronizado de erros.
+```text
+frontend/src
+|
+|-- components
+|   |-- auth
+|   |-- dashboard
+|   `-- ui
+|-- hooks
+|-- lib
+|-- pages
+|-- services
+`-- types
+```
 
 ## Requisitos
 
 - Java 17+
+- Node.js 20+
 - Docker Desktop
 - Maven Wrapper incluso no projeto
 
-## Rodando localmente
+## Rodando com Docker
 
 Suba API + MongoDB:
 
@@ -123,21 +151,7 @@ Suba API + MongoDB:
 docker compose up --build
 ```
 
-Tambem e possivel subir apenas o MongoDB pelo Compose e rodar a API via Maven:
-
-```bash
-docker compose up -d mongodb
-./mvnw spring-boot:run
-```
-
-No Windows PowerShell:
-
-```powershell
-docker compose up -d mongodb
-.\mvnw.cmd spring-boot:run
-```
-
-A API ficara disponivel em:
+A API ficará disponível em:
 
 ```text
 http://localhost:8080
@@ -149,50 +163,194 @@ Swagger:
 http://localhost:8080/swagger-ui/index.html
 ```
 
-## Variaveis de ambiente
+## Rodando em Desenvolvimento
 
-A aplicacao possui valores padrao para ambiente local, mas pode ser configurada por variaveis:
+### 1. Subir MongoDB
 
-| Variavel | Padrao | Descricao |
+```bash
+docker compose up -d mongodb
+```
+
+### 2. Rodar backend
+
+Linux/macOS:
+
+```bash
+SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
+```
+
+Windows PowerShell:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE="dev"
+.\mvnw.cmd spring-boot:run
+```
+
+O profile `dev` ativa o seed de dados de desenvolvimento.
+
+### 3. Rodar frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+## Variáveis de Ambiente
+
+Backend:
+
+| Variável | Padrão | Descrição |
 |---|---|---|
 | `SPRING_DATA_MONGODB_URI` | `mongodb://localhost:27017/freela_cashflow` | URI do MongoDB |
 | `SERVER_PORT` | `8080` | Porta HTTP da API |
+| `SPRING_PROFILES_ACTIVE` | vazio | Use `dev` para ativar o seed |
 | `SECURITY_JWT_SECRET` | `freela-cashflow-development-secret-change-me` | Chave usada para assinar JWT |
 | `SECURITY_JWT_ISSUER` | `freela-cashflow` | Issuer do token |
-| `SECURITY_JWT_EXPIRATION_SECONDS` | `86400` | Expiracao do token em segundos |
+| `SECURITY_JWT_EXPIRATION_SECONDS` | `86400` | Expiração do token em segundos |
 
-Para producao, troque obrigatoriamente `SECURITY_JWT_SECRET`.
+Frontend:
 
-## Docker
+| Variável | Exemplo | Descrição |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8080` | URL base da API |
 
-O Compose sobe a API na porta `8080` e o MongoDB na porta `27017`:
+Arquivo:
 
-```bash
-docker compose up --build
+```text
+frontend/.env
 ```
 
-Build manual da imagem:
+Exemplo:
 
-```bash
-docker build -t freela-cashflow-api:local .
+```env
+VITE_API_BASE_URL=http://localhost:8080
 ```
 
-Rodando a API em container apontando para o Mongo local do host:
+## Usuário de Desenvolvimento
 
-```powershell
-docker run --rm -p 8080:8080 `
-  -e SPRING_DATA_MONGODB_URI=mongodb://host.docker.internal:27017/freela_cashflow `
-  -e SECURITY_JWT_SECRET=change-this-secret `
-  freela-cashflow-api:local
+Com o backend rodando em profile `dev`, o seed cria o usuário:
+
+```text
+Nome: Nicholas Silva
+E-mail: nicholas.dev@freelacashflow.com
+Senha: 123456
 ```
 
-## Autenticacao
+A senha é salva usando o mesmo `PasswordEncoder` da autenticação real.
 
-Cadastro:
+## Seed de Desenvolvimento
+
+Classe:
+
+```text
+src/main/java/com/nicholas/freelacashflow/config/seed/DevDataSeeder.java
+```
+
+Comportamento:
+
+- roda apenas com `@Profile("dev")`;
+- cria ou atualiza o usuário de desenvolvimento;
+- remove categorias, receitas e despesas desse usuário;
+- recria uma base limpa para testes;
+- não roda em produção.
+
+Dados criados:
+
+- Categorias: Equipamentos, Internet, Alimentação, Transporte, Educação, Ferramentas, Assinaturas, Moradia, Saúde e Outros.
+- Receitas do mês atual com status `RECEIVED` e `EXPECTED`.
+- Receitas do mês anterior com status `RECEIVED`.
+- Despesas do mês atual com status `PAID`, `PENDING` e `OVERDUE`.
+- Despesas do mês anterior com status `PAID`.
+
+## Funcionalidades do Frontend
+
+### Autenticação
+
+- Tela de login.
+- Tela de cadastro.
+- Armazenamento do JWT para desenvolvimento.
+- Envio automático do header:
+
+```http
+Authorization: Bearer {token}
+```
+
+### Dashboard
+
+O dashboard consome:
+
+- `GET /api/monthly-summary?month={month}&year={year}`
+- `GET /api/incomes?month={month}&year={year}`
+- `GET /api/expenses?month={month}&year={year}`
+- `GET /api/categories`
+
+Recursos:
+
+- resumo financeiro mensal;
+- filtro por mês/ano;
+- cards de receita, despesas e saldos;
+- indicador de renda comprometida;
+- alerta de pendências;
+- resolução de pendências por despesa;
+- timeline de fluxo do mês;
+- lista de movimentações.
+
+### Pendências
+
+O botão `Resolver pendências` exibe despesas `PENDING` e `OVERDUE`.
+
+Cada item pode ser marcado como pago com uma data de pagamento. A ação chama:
+
+```http
+PATCH /api/expenses/{expenseId}/pay
+```
+
+Payload:
+
+```json
+{
+  "paidDate": "2026-05-27"
+}
+```
+
+### Telas
+
+- Resumo
+- Análises
+- Receitas
+- Despesas
+- Categorias
+
+### Análises
+
+A tela de análises mostra gráficos simples com:
+
+- receita recebida;
+- despesas pagas;
+- saldo real;
+- receitas previstas;
+- receitas recebidas;
+- despesas pendentes;
+- despesas vencidas;
+- despesas agrupadas por categoria.
+
+## Endpoints Principais
+
+### Autenticação
 
 ```http
 POST /api/auth/register
+POST /api/auth/login
 ```
+
+Cadastro:
 
 ```json
 {
@@ -203,10 +361,6 @@ POST /api/auth/register
 ```
 
 Login:
-
-```http
-POST /api/auth/login
-```
 
 ```json
 {
@@ -228,14 +382,6 @@ Resposta:
 }
 ```
 
-Use o token nos endpoints protegidos:
-
-```http
-Authorization: Bearer jwt-token
-```
-
-## Endpoints principais
-
 ### Categorias
 
 ```http
@@ -246,12 +392,12 @@ PUT    /api/categories/{categoryId}
 DELETE /api/categories/{categoryId}
 ```
 
-Exemplo:
+Payload:
 
 ```json
 {
   "name": "Equipamentos",
-  "description": "Gastos com computador, perifericos e ferramentas"
+  "description": "Gastos com computador, periféricos e ferramentas"
 }
 ```
 
@@ -260,7 +406,7 @@ Exemplo:
 ```http
 POST   /api/incomes
 GET    /api/incomes
-GET    /api/incomes?month=6&year=2026
+GET    /api/incomes?month=5&year=2026
 GET    /api/incomes/{incomeId}
 PUT    /api/incomes/{incomeId}
 DELETE /api/incomes/{incomeId}
@@ -271,10 +417,10 @@ Criar receita:
 
 ```json
 {
-  "description": "Parcela 1 do freelance",
+  "description": "Parcela 1 do projeto landing page",
   "amount": 1500.00,
-  "expectedDate": "2026-06-05",
-  "source": "Projeto freelance"
+  "expectedDate": "2026-05-05",
+  "source": "Cliente Landing Page"
 }
 ```
 
@@ -282,7 +428,7 @@ Marcar como recebida:
 
 ```json
 {
-  "receivedDate": "2026-06-06"
+  "receivedDate": "2026-05-05"
 }
 ```
 
@@ -291,7 +437,7 @@ Marcar como recebida:
 ```http
 POST   /api/expenses
 GET    /api/expenses
-GET    /api/expenses?month=6&year=2026
+GET    /api/expenses?month=5&year=2026
 GET    /api/expenses/{expenseId}
 PUT    /api/expenses/{expenseId}
 DELETE /api/expenses/{expenseId}
@@ -303,9 +449,9 @@ Criar despesa:
 ```json
 {
   "categoryId": "category_id",
-  "description": "Parcela do PC",
+  "description": "Parcela do notebook",
   "amount": 1000.00,
-  "dueDate": "2026-06-17",
+  "dueDate": "2026-05-08",
   "fixed": true
 }
 ```
@@ -314,45 +460,48 @@ Marcar como paga:
 
 ```json
 {
-  "paidDate": "2026-06-17"
+  "paidDate": "2026-05-08"
 }
 ```
 
-### Resumo mensal
+### Resumo Mensal
 
 ```http
-GET /api/monthly-summary?month=6&year=2026
+GET /api/monthly-summary?month=5&year=2026
 ```
 
-Exemplo de resposta:
+Resposta:
 
 ```json
 {
-  "month": 6,
+  "month": 5,
   "year": 2026,
-  "expectedIncome": 3000.00,
-  "receivedIncome": 1500.00,
-  "expectedExpenses": 1200.00,
-  "paidExpenses": 1000.00,
-  "pendingExpenses": 200.00,
-  "expectedBalance": 1800.00,
-  "realBalance": 500.00,
-  "committedIncomePercentage": 40.00
+  "expectedIncome": 3950.00,
+  "receivedIncome": 1850.00,
+  "expectedExpenses": 1499.70,
+  "paidExpenses": 1139.90,
+  "pendingExpenses": 359.80,
+  "expectedBalance": 2450.30,
+  "realBalance": 710.10,
+  "committedIncomePercentage": 37.97
 }
 ```
 
-## Regras de negocio
+## Regras de Negócio
 
-- Receita nao pode ter valor menor ou igual a zero.
-- Despesa nao pode ter valor menor ou igual a zero.
-- Receita recebida exige `receivedDate`.
-- Despesa paga exige `paidDate`.
-- Dados financeiros sao sempre isolados por usuario.
-- Categoria usada em despesa precisa pertencer ao usuario autenticado.
-- Despesa pendente com vencimento anterior a data atual aparece como `OVERDUE` na resposta.
-- Resumo mensal e calculado dinamicamente.
+- Receita não pode ter valor menor ou igual a zero.
+- Despesa não pode ter valor menor ou igual a zero.
+- Receita `RECEIVED` exige `receivedDate`.
+- Receita `EXPECTED` não deve ter `receivedDate`.
+- Despesa `PAID` exige `paidDate`.
+- Despesa `PENDING` não deve ter `paidDate`.
+- Despesa `OVERDUE` não deve ter `paidDate`.
+- Dados financeiros são sempre isolados por usuário.
+- Categoria usada em despesa precisa pertencer ao usuário autenticado.
+- Despesa pendente com vencimento anterior à data atual aparece como `OVERDUE` na resposta.
+- Resumo mensal é calculado dinamicamente.
 
-Formulas:
+Fórmulas:
 
 ```text
 Saldo previsto = receitas previstas - despesas previstas
@@ -360,9 +509,7 @@ Saldo real = receitas recebidas - despesas pagas
 Percentual comprometido = despesas previstas / receitas previstas * 100
 ```
 
-## Collections
-
-Collections principais:
+## Collections MongoDB
 
 ```text
 users
@@ -371,38 +518,61 @@ incomes
 expenses
 ```
 
-O resumo mensal nao possui collection propria. Ele e calculado a partir de `incomes` e `expenses`.
+O resumo mensal não possui collection própria. Ele é calculado a partir de `incomes` e `expenses`.
 
 ## Testes
 
-Rodar todos os testes:
+Backend:
 
 ```bash
 ./mvnw test
 ```
 
-No Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 .\mvnw.cmd test
 ```
 
-Cobertura atual:
+Frontend:
+
+```bash
+cd frontend
+npm run build
+```
+
+Cobertura do backend:
 
 - `CategoryService`
 - `IncomeService`
 - `ExpenseService`
 - `MonthlySummaryService`
 - carga de contexto Spring
-- controllers de autenticacao, categorias, receitas, despesas e resumo mensal
-- integracao com MongoDB via Testcontainers
 
-Os testes de integracao precisam de Docker ativo. Quando Docker nao esta disponivel, eles sao ignorados automaticamente.
+Os testes de controller com Testcontainers foram removidos para manter o ciclo local de testes mais simples e rápido.
 
-## Documentacao complementar
+## Build
 
-Documentos de planejamento:
+Backend:
+
+```bash
+./mvnw clean package
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run build
+```
+
+Docker:
+
+```bash
+docker build -t freela-cashflow-api:local .
+```
+
+## Documentação Complementar
 
 - `docs/freela-cashflow-brd.md`
 - `docs/freela-cashflow-planejamento.md`
-

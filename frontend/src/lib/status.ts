@@ -13,12 +13,17 @@ export const statusLabels: Record<FinancialStatus, string> = {
 };
 
 export const statusStyles: Record<FinancialStatus, string> = {
-  EXPECTED: "border-info/20 bg-info/10 text-info",
-  RECEIVED: "border-success/20 bg-success/10 text-success",
-  PENDING: "border-warning/25 bg-warning/15 text-[#8B6418]",
-  PAID: "border-success/20 bg-success/10 text-success",
-  OVERDUE: "border-destructive/20 bg-destructive/10 text-destructive",
-  CANCELED: "border-ink-muted/20 bg-ink-muted/10 text-ink-muted",
+  EXPECTED:
+    "border-[#d8e7f1] bg-[#eaf2f8] text-[#3e6d91] dark:border-info/20 dark:bg-info/10 dark:text-info",
+  RECEIVED:
+    "border-[#d7eadf] bg-[#eaf5ef] text-[#2f7d5c] dark:border-success/20 dark:bg-success/10 dark:text-success",
+  PENDING:
+    "border-[#f1dfaa] bg-[#fff4d6] text-[#9a6b13] dark:border-warning/20 dark:bg-warning/10 dark:text-warning",
+  PAID:
+    "border-[#d7eadf] bg-[#eaf5ef] text-[#2f7d5c] dark:border-success/20 dark:bg-success/10 dark:text-success",
+  OVERDUE:
+    "border-[#f0d0d0] bg-[#fbeaea] text-[#b34a4a] dark:border-destructive/20 dark:bg-destructive/10 dark:text-destructive",
+  CANCELED: "border-border bg-muted text-ink-muted",
 };
 
 export function getCommitmentMessage(percentage: number) {

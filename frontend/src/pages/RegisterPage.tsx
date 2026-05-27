@@ -1,27 +1,28 @@
 import { FormEvent, useState } from "react";
-import { AlertCircle, LockKeyhole, Mail } from "lucide-react";
+import { AlertCircle, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GlassButton } from "@/components/ui/liquid-glass";
 import type { Theme } from "@/hooks/useTheme";
-import { login, type StoredAuth } from "@/services/authService";
+import { register, type StoredAuth } from "@/services/authService";
 
-interface LoginPageProps {
+interface RegisterPageProps {
   theme: Theme;
   onThemeToggle: () => void;
-  onGoToRegister: () => void;
+  onGoToLogin: () => void;
   onAuthenticated: (auth: StoredAuth) => void;
 }
 
-export function LoginPage({
+export function RegisterPage({
   theme,
   onThemeToggle,
-  onGoToRegister,
+  onGoToLogin,
   onAuthenticated,
-}: LoginPageProps) {
-  const [email, setEmail] = useState("nicholas.dev@freelacashflow.com");
-  const [password, setPassword] = useState("123456");
+}: RegisterPageProps) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,10 +32,10 @@ export function LoginPage({
     setIsLoading(true);
 
     try {
-      const response = await login({ email, password });
+      const response = await register({ name, email, password });
       onAuthenticated({ token: response.token, user: response.user });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Não foi possível fazer login.");
+      setError(err instanceof Error ? err.message : "Não foi possível criar sua conta.");
     } finally {
       setIsLoading(false);
     }
@@ -42,42 +43,59 @@ export function LoginPage({
 
   return (
     <AuthShell
-      title="Entrar no painel"
-      description="Acesse seu fluxo mensal com os dados reais da sua conta."
-      modeLabel="Ainda não tem conta?"
-      modeActionLabel="Criar cadastro"
-      onModeAction={onGoToRegister}
+      title="Criar cadastro"
+      description="Crie uma conta para separar seus dados financeiros e acompanhar o mês com segurança."
+      modeLabel="Já tem conta?"
+      modeActionLabel="Entrar"
+      onModeAction={onGoToLogin}
       theme={theme}
       onThemeToggle={onThemeToggle}
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-2">
-          <Label htmlFor="email">E-mail</Label>
+          <Label htmlFor="name">Nome</Label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-muted" />
+            <UserRound className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-muted" />
             <Input
-              id="email"
-              type="email"
+              id="name"
+              type="text"
               className="h-11 bg-muted/50 pl-9"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="seu@email.com"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Seu nome"
               required
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Senha</Label>
+          <Label htmlFor="register-email">E-mail</Label>
+          <div className="relative">
+            <Mail className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-muted" />
+            <Input
+              id="register-email"
+              type="email"
+              className="h-11 bg-muted/50 pl-9"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="voce@email.com"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="register-password">Senha</Label>
           <div className="relative">
             <LockKeyhole className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink-muted" />
             <Input
-              id="password"
+              id="register-password"
               type="password"
               className="h-11 bg-muted/50 pl-9"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Sua senha"
+              placeholder="Mínimo de 6 caracteres"
+              minLength={6}
               required
             />
           </div>
@@ -96,7 +114,7 @@ export function LoginPage({
           className="w-full text-primary"
           disabled={isLoading}
         >
-          {isLoading ? "Entrando..." : "Entrar"}
+          {isLoading ? "Criando..." : "Criar conta"}
         </GlassButton>
       </form>
     </AuthShell>
